@@ -3,7 +3,7 @@
 *   Webbdesign med JavaScript och
 *   Document Object Model, 7.5 hp
 *   Examinationsuppgift 1
-*   Validering av formulär
+*   Tabellhantering och beräkning 
 *   6/11-18
 */
 
