@@ -1,62 +1,143 @@
+/*
+*   Skrivet av Thomas Sarlin 
+*   Webbdesign med JavaScript och
+*   Document Object Model, 7.5 hp
+*   Examinationsuppgift 1
+*   Validering av formulär
+*/
 
+
+var pattern = /^([a-zA-Z0-9_.-])+@([a-zA-Z0-9_.-])+\.([a-zA-Z])+([a-zA-Z])+/; 
+//Skapar textnoder för att kunna skicka ut meddelanden till anv. vid behov
+var emailNotification = document.createTextNode("");
+var first_nameNotification = document.createTextNode("");
+var last_nameNotification = document.createTextNode("");
+var organisationNotification = document.createTextNode("");
+var last_nameNotification = document.createTextNode("");
+var mainNotification = document.createTextNode("");
+var checkboxNotification = document.createTextNode("");
+var first_name,last_name,email,organisation,checkbox,checkbox_message;
 window.onload=()=>{
-    document.getElementById('registration_form').addEventListener('submit',validate);
-};
+    setSubmitHandler();
+    setMaxMessageLength();
+}
+function loadVariables(){
+    first_name = document.getElementById('field_firstname');
+    last_name = document.getElementById('field_lastname');
+    email = document.getElementById('field_email');
+    organisation = document.getElementById('field_organisation');
+    checkbox = document.querySelector('input[name="pres_type"]:checked');
+    checkbox_message = document.getElementById('field_pres_title');
+}
+function setSubmitHandler(){
+    document.getElementById('registration_form')
+        .addEventListener('submit',validate);
+}
 
+/** 
+ *  Begränsar antalet tecken som kan skrivas in i textfältet till 200.
+ * */
+function setMaxMessageLength(){
+    var messageField=document.getElementById('field_message');
+    messageField.addEventListener('keyup',()=>{
+        if (messageField.value.length > 200) {
+            messageField.value = messageField.value.substring(0, 200);
+        } 
+    });
+}
 function validate(e){
     var result;
     if(!(result=checkFields()))
-        e.preventDefault();
+        e.preventDefault(); //ignorera submit om något är felaktigt ifyllt
     return result;
 }
 
 function checkFields(){
     var result=true;
-    var first_name = document.getElementById('field_firstname');
-    var last_name = document.getElementById('field_lastname');
-    var email = document.getElementById('field_email');
-    var organisation = document.getElementById('field_organisation');
-    
-    checkTextField(first_name)?"":result=false;
-    checkTextField(last_name)?"":result=false;
-    checkTextField(organisation)?"":result=false; 
-    checkEmailFormat(email)?"":result=false;
+    loadVariables();
+    checkTextField(first_name,first_nameNotification)?"":result=false;
+    checkTextField(last_name,last_nameNotification)?"":result=false;
+    checkTextField(organisation,organisationNotification)?"":result=false; 
+    checkEmailFormat(email,emailNotification)?"":result=false;
+    checkboxValidation(checkbox,checkbox_message,checkboxNotification)?"":result=false;
     if(!result){
-        var text = document.createTextNode("Formuläret ej ifyllt korrekt");
-        document.getElementById('registration_form').parentNode.insertBefore(text, document.getElementById('registration_form').nextSibling)
+        setTextField(mainNotification,"Formuläret ej ifyllt korrekt");
+        insertTextField(document.getElementById('registration_form')
+            ,mainNotification);
+    }else{
+        hideTextField(mainNotification);
     }
     return result;
 };
-function checkTextField(element){
-    if(element.textContent.length==0){
-        console.log(element.parentElement);
-        element.style.border="red";
-        element.style.borderWidth="1px";
-        element.style.borderStyle="solid";
-        var text = document.createTextNode("Fältet oven får ej lämnas tomt");
-        element.parentNode.insertBefore(text, element.nextSibling)
+
+function checkTextField(element,textField){
+    var result=true;
+    if(emptyfield(element.value)){
+        setBorder(element);
+        setTextField(textField,"Fältet oven får ej lämnas tomt");
+        insertTextField(element,textField);
+        result=false;
+    }else{
+        removeBorder(element);
+        hideTextField(textField);
     }
+    return result;
 }
-function checkEmailFormat(email){
-    var text;
-    var pattern = /^([a-zA-Z0-9_.-])+@([a-zA-Z0-9_.-])+\.([a-zA-Z])+([a-zA-Z])+/;
-    if(email.textContent!=""){
-        if(pattern.test(email.textContent)){
+
+function insertTextField(element,textField){
+    element.parentNode.insertBefore(textField, element.nextSibling);
+}
+
+function checkboxValidation(element,comment,textField){
+    var result=true;
+    if(emptyfield(comment.value)
+        && (element.id=='pres_type_1' || element.id=='pres_type_2')){
+        result=false;
+        setTextField(textField,"Fältet ovan får ej vara tomt"+
+        " vid föreläsning/seminarie");
+        insertTextField(comment,textField);
+        setBorder(comment);
+    }else{
+        removeBorder(comment);
+        hideTextField(textField);
+    }
+    return result;
+}
+
+function setBorder(element){
+    element.style.border="red";
+    element.style.borderWidth="1px";
+    element.style.borderStyle="solid";    
+}
+function removeBorder(element){
+    element.style.border="#ccc";
+    element.style.borderWidth="1px";
+    element.style.borderStyle="solid";  
+}
+function hideTextField(element){
+    element.textContent="";
+}
+function setTextField(element,value){
+    element.textContent=value;
+}
+function emptyfield(a){
+    return a=="";
+}
+function checkEmailFormat(email,textField){
+    if(!emptyfield(email.value)){
+        if(pattern.test(email.value)){
+            removeBorder(email);
+            hideTextField(textField);
             return true;
         }else{
-            email.style.border="red";
-            email.style.borderWidth="1px";
-            email.style.borderStyle="solid";
-            text = document.createTextNode("Felaktigt format");
-            email.parentNode.insertBefore(text, email.nextSibling)
+            setBorder(email);
+            setTextField(textField,"Ogiltigt mail format");
+            insertTextField(email,textField);
         }
-        
     }else{
-            email.style.border="red";
-            email.style.borderWidth="1px";
-            email.style.borderStyle="solid";
-        text = document.createTextNode("Fältet oven får ej lämnas tomt");
-        email.parentNode.insertBefore(text, email.nextSibling)
+        setBorder(email);
+        setTextField(textField,"Fältet oven får ej lämnas tomt");
+        insertTextField(email,textField);
     }
     return false;
 }
