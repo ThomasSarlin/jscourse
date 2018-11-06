@@ -1,3 +1,11 @@
+/*
+*   Skrivet av Thomas Sarlin 
+*   Webbdesign med JavaScript och
+*   Document Object Model, 7.5 hp
+*   Examinationsuppgift 1
+*   Validering av formulär
+*   6/11-18
+*/
 
 window.onload=()=>{
     addSumColumn();
