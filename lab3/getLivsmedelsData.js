@@ -1,8 +1,6 @@
 /*
 *   Skrivet av Thomas Sarlin 
-*   Webbdesign med JavaScript och
-*   Document Object Model, 7.5 hp
-*   Examinationsuppgift 1
+*   Examinationsuppgift 2
 *   Dynamisk uppdatering av sidinnehåll
 *   6/11-18
 */
