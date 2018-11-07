@@ -1,8 +1,6 @@
 /*
 *   Skrivet av Thomas Sarlin 
-*   Webbdesign med JavaScript och
-*   Document Object Model, 7.5 hp
-*   Examinationsuppgift 1
+*   Examinationsuppgift 4
 *   Dynamiskt visade och dolda sidkomponenter
 *   Betygsmål: VG
 */
