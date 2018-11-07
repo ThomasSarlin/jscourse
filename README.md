@@ -1,3 +1,9 @@
 # jscourse
 ## Lab1
-Create a validation.js to check the input fields accodring to the assignment.
+Validation of form with js
+## Lab2
+Tablehandling and calculation js
+## Lab3
+Dynamically updating page-content with ajax & jquery
+## Lab4
+Dynamic hiding and showing of DOM-components with js/jquery
