@@ -1,4 +1,5 @@
 # jscourse
+These assignments were targeted at manipulating DOM with nothing but js/jquerya
 ## Lab1
 Validation of form with js
 ## Lab2
